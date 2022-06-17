@@ -1,6 +1,5 @@
 package game;
 
-import card.Card;
 import card.NumberCard;
 import player.Player;
 
@@ -26,17 +25,7 @@ public class GameServices {
         return game.getDesk();
     }
 
-    public boolean hasEndLevel() {
-        for (Player player : game.getPlayers())
-            if (!player.getNumberCard().isEmpty()) return false;
-        return true;
-    }
-
-//    public boolean hasEndGame() {
-//        return game.();
-//    }
-
-    public Card getRandomNumberCard() {
+    public NumberCard getRandomNumberCard() {
         return game.getNotPlayedNumberCards().pop();
     }
 
@@ -45,6 +34,7 @@ public class GameServices {
         for (Player player : game.getPlayers()) {
             for (int i = 0; i < getDesk().getLevelCard().getLevel(); i++)
                 player.getNumberCard().add(getRandomNumberCard());
+            Collections.sort(player.getNumberCard());
         }
     }
 
@@ -58,9 +48,15 @@ public class GameServices {
     }
 
 
-//    public ArrayList<NumberCard> useNinjaCard() {
-//        if (!getDesk().getNinjaCards().isEmpty()) {
-//
-//        }
-//    }
+    public ArrayList<NumberCard> useNinjaCard() {
+        if (!getDesk().getNinjaCards().isEmpty()) {
+            ArrayList<NumberCard> result = new ArrayList<>();
+            for (Player player : game.getPlayers()) {
+                NumberCard lowestNumberCard = player.popLowestNumberCard();
+                result.add(lowestNumberCard);
+            }
+            return result;
+        }
+        return null;
+    }
 }

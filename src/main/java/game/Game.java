@@ -13,8 +13,10 @@ public class Game {
     private LinkedList<HeartCard> notPlayedHeartCards;
     private LinkedList<NinjaCard> notPlayedNinjaCard;
     private LinkedList<LevelCard> notPlayedLevelCard;
+    private int numberOfPlayers;
 
     public Game(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
         players = new Player[numberOfPlayers];
         this.desk = new Desk(new Stack<NumberCard>(), new LinkedList<HeartCard>(),
                 new LinkedList<NinjaCard>(), new LevelCard(1));
@@ -69,7 +71,20 @@ public class Game {
         this.notPlayedLevelCard = notPlayedLevelCard;
     }
 
-//    public GameStatus getStatus() {
-//        if()
-//    }
+    public boolean hasEndLevel() {
+        for (Player player : getPlayers())
+            if (!player.getNumberCard().isEmpty()) return false;
+        return true;
+    }
+
+    //if we lose all the heart cards, we lose.
+    public GameStatus getStatus() {
+        if (getLastLevel() == desk.getLevelCard().getLevel() && hasEndLevel()) return GameStatus.win;
+        if (desk.getHeartCards().isEmpty()) return GameStatus.lose;
+        return GameStatus.inProgress;
+    }
+
+    public int getLastLevel() {
+        return 16 - (2 * numberOfPlayers);
+    }
 }
