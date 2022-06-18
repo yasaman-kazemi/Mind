@@ -3,6 +3,7 @@ package game;
 import card.LevelCard;
 import card.NumberCard;
 
+import java.util.Collections;
 import java.util.Stack;
 
 public class Desk {
@@ -78,5 +79,9 @@ public class Desk {
 
     public void putNumberCard(NumberCard numberCard) {
         shownNumberCards.push(numberCard);
+    }
+
+    public void sortShownNumberCards() {
+        Collections.sort(shownNumberCards);
     }
 }

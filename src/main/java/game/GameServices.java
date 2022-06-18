@@ -25,9 +25,26 @@ public class GameServices {
         giveNumberCard();
     }
 
-    public void play(Player player) {
+    public String noticeEnd() {
+        return game.getStatus().toString();
+    }
+
+    //todo fill these methods
+    public String play(Player player) {
         NumberCard numberCard = player.popLowestNumberCard();
-        getDesk().putNumberCard(numberCard);
+        if (isCardValid(numberCard)) getDesk().putNumberCard(numberCard);
+        else loseHeartCard();
+        return "";
+    }
+
+    public String wrongCardPlayed() {
+        loseHeartCard();
+        GameStatus gameStatus = game.getStatus();
+        if (gameStatus == GameStatus.lose) return noticeEnd();
+        else {
+
+        }
+        return "";
     }
 
     public Desk getDesk() {
@@ -49,14 +66,12 @@ public class GameServices {
 
 
     public boolean isCardValid(NumberCard playedNumberCard) {
-        if (getDesk().getShownNumberCards().peek().getValue() < playedNumberCard.getValue()) return true;
-        return false;
+        return !hasAnyoneLowerNumberCard(playedNumberCard);
     }
 
     public boolean hasAnyoneLowerNumberCard(NumberCard numberCard) {
-        for (Player player : game.getPlayers()) {
+        for (Player player : game.getPlayers())
             if (player.hasLowerNumberCard(numberCard)) return true;
-        }
         return false;
     }
 
