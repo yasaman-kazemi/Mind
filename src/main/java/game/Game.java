@@ -1,25 +1,22 @@
 package game;
 
-import card.*;
+import card.LevelCard;
+import card.NumberCard;
 import player.Player;
 
-import java.util.LinkedList;
 import java.util.Stack;
 
 public class Game {
     private Player[] players;
     private Desk desk;
     private Stack<NumberCard> notPlayedNumberCards;
-    private LinkedList<HeartCard> notPlayedHeartCards;
-    private LinkedList<NinjaCard> notPlayedNinjaCard;
-    private LinkedList<LevelCard> notPlayedLevelCard;
     private int numberOfPlayers;
 
     public Game(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
         players = new Player[numberOfPlayers];
-        this.desk = new Desk(new Stack<NumberCard>(), new LinkedList<HeartCard>(),
-                new LinkedList<NinjaCard>(), new LevelCard(1));
+        this.desk = new Desk(new Stack<>(), numberOfPlayers,
+                2, new LevelCard(1));
     }
 
 
@@ -47,40 +44,17 @@ public class Game {
         this.notPlayedNumberCards = notPlayedNumberCards;
     }
 
-    public LinkedList<HeartCard> getNotPlayedHeartCards() {
-        return notPlayedHeartCards;
-    }
-
-    public void setNotPlayedHeartCards(LinkedList<HeartCard> notPlayedHeartCards) {
-        this.notPlayedHeartCards = notPlayedHeartCards;
-    }
-
-    public LinkedList<NinjaCard> getNotPlayedNinjaCard() {
-        return notPlayedNinjaCard;
-    }
-
-    public void setNotPlayedNinjaCard(LinkedList<NinjaCard> notPlayedNinjaCard) {
-        this.notPlayedNinjaCard = notPlayedNinjaCard;
-    }
-
-    public LinkedList<LevelCard> getNotPlayedLevelCard() {
-        return notPlayedLevelCard;
-    }
-
-    public void setNotPlayedLevelCard(LinkedList<LevelCard> notPlayedLevelCard) {
-        this.notPlayedLevelCard = notPlayedLevelCard;
-    }
 
     public boolean hasEndLevel() {
         for (Player player : getPlayers())
-            if (!player.getNumberCard().isEmpty()) return false;
+            if (!player.getNumberCards().isEmpty()) return false;
         return true;
     }
 
     //if we lose all the heart cards, we lose.
     public GameStatus getStatus() {
         if (getLastLevel() == desk.getLevelCard().getLevel() && hasEndLevel()) return GameStatus.win;
-        if (desk.getHeartCards().isEmpty()) return GameStatus.lose;
+        if (desk.hasAvailableHeartCards()) return GameStatus.lose;
         return GameStatus.inProgress;
     }
 

@@ -1,21 +1,22 @@
 package game;
 
-import card.*;
+import card.LevelCard;
+import card.NumberCard;
 
-import java.util.LinkedList;
 import java.util.Stack;
 
 public class Desk {
     private Stack<NumberCard> shownNumberCards;
-    private LinkedList<HeartCard> heartCards;
-    private LinkedList<NinjaCard> ninjaCards;
     private LevelCard levelCard;
+    private int availableHeartCards;
+    private int availableNinjaCards;
 
-    public Desk(Stack<NumberCard> shownNumberCards, LinkedList<HeartCard> heartCards,
-                LinkedList<NinjaCard> ninjaCards, LevelCard levelCard) {
+
+    public Desk(Stack<NumberCard> shownNumberCards, int availableHeartCards,
+                int availableNinjaCards, LevelCard levelCard) {
         this.shownNumberCards = shownNumberCards;
-        this.heartCards = heartCards;
-        this.ninjaCards = ninjaCards;
+        this.availableHeartCards = availableHeartCards;
+        this.availableNinjaCards = availableNinjaCards;
         this.levelCard = levelCard;
     }
 
@@ -27,22 +28,6 @@ public class Desk {
         this.shownNumberCards = shownNumberCards;
     }
 
-    public LinkedList<HeartCard> getHeartCards() {
-        return heartCards;
-    }
-
-    public void setHeartCards(LinkedList<HeartCard> heartCards) {
-        this.heartCards = heartCards;
-    }
-
-    public LinkedList<NinjaCard> getNinjaCards() {
-        return ninjaCards;
-    }
-
-    public void setNinjaCards(LinkedList<NinjaCard> ninjaCards) {
-        this.ninjaCards = ninjaCards;
-    }
-
     public LevelCard getLevelCard() {
         return levelCard;
     }
@@ -51,4 +36,47 @@ public class Desk {
         this.levelCard = levelCard;
     }
 
+    public int getAvailableHeartCards() {
+        return availableHeartCards;
+    }
+
+    public void setAvailableHeartCards(int availableHeartCards) {
+        this.availableHeartCards = availableHeartCards;
+    }
+
+    public int getAvailableNinjaCards() {
+        return availableNinjaCards;
+    }
+
+    public void setAvailableNinjaCards(int availableNinjaCards) {
+        this.availableNinjaCards = availableNinjaCards;
+    }
+
+    public boolean hasAvailableHeartCards() {
+        return availableHeartCards > 0;
+    }
+
+    public boolean hasAvailableNinjaCards() {
+        return availableNinjaCards > 0;
+    }
+
+    public void decreaseHeartCards() {
+        availableHeartCards--;
+    }
+
+    public void increaseHeartCards() {
+        availableHeartCards++;
+    }
+
+    public void decreaseNinjaCards() {
+        availableNinjaCards--;
+    }
+
+    public void increaseNinjaCards() {
+        availableNinjaCards++;
+    }
+
+    public void putNumberCard(NumberCard numberCard) {
+        shownNumberCards.push(numberCard);
+    }
 }

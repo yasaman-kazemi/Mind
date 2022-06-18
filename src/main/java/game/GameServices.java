@@ -21,6 +21,15 @@ public class GameServices {
         this.game = game;
     }
 
+    public void start() {
+        giveNumberCard();
+    }
+
+    public void play(Player player) {
+        NumberCard numberCard = player.popLowestNumberCard();
+        getDesk().putNumberCard(numberCard);
+    }
+
     public Desk getDesk() {
         return game.getDesk();
     }
@@ -33,23 +42,31 @@ public class GameServices {
         Collections.shuffle(game.getNotPlayedNumberCards());
         for (Player player : game.getPlayers()) {
             for (int i = 0; i < getDesk().getLevelCard().getLevel(); i++)
-                player.getNumberCard().add(getRandomNumberCard());
-            Collections.sort(player.getNumberCard());
+                player.getNumberCards().add(getRandomNumberCard());
+            Collections.sort(player.getNumberCards());
         }
     }
+
 
     public boolean isCardValid(NumberCard playedNumberCard) {
         if (getDesk().getShownNumberCards().peek().getValue() < playedNumberCard.getValue()) return true;
         return false;
     }
 
+    public boolean hasAnyoneLowerNumberCard(NumberCard numberCard) {
+        for (Player player : game.getPlayers()) {
+            if (player.hasLowerNumberCard(numberCard)) return true;
+        }
+        return false;
+    }
+
     public void loseHeartCard() {
-        if (!getDesk().getHeartCards().isEmpty()) getDesk().getHeartCards().remove(0);
+        if (getDesk().hasAvailableHeartCards()) getDesk().decreaseHeartCards();
     }
 
 
     public ArrayList<NumberCard> useNinjaCard() {
-        if (!getDesk().getNinjaCards().isEmpty()) {
+        if (getDesk().hasAvailableNinjaCards()) {
             ArrayList<NumberCard> result = new ArrayList<>();
             for (Player player : game.getPlayers()) {
                 NumberCard lowestNumberCard = player.popLowestNumberCard();
@@ -58,5 +75,9 @@ public class GameServices {
             return result;
         }
         return null;
+    }
+
+    public void loseNinjaCard() {
+        if (getDesk().hasAvailableNinjaCards()) getDesk().decreaseNinjaCards();
     }
 }
