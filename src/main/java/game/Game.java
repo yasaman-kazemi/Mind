@@ -6,13 +6,14 @@ import card.LevelCard;
 import card.NumberCard;
 import player.Player;
 
+import java.util.Collections;
 import java.util.Stack;
 
 public class Game {
     private Player[] players;
     private Desk desk;
     private Stack<NumberCard> notPlayedNumberCards;
-    private int numberOfPlayers;
+    private final int numberOfPlayers;
 
     public Game(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
@@ -64,17 +65,31 @@ public class Game {
         return 16 - (2 * numberOfPlayers);
     }
 
-    public LevelCard goNextLevel() {
+    public void goNextLevel() {
         Card gift = desk.getLevelCard().getGift();
         if (gift != null) {
             if (gift instanceof HeartCard) desk.increaseHeartCards();
             else desk.increaseNinjaCards();
         }
-        return desk.nextLevel();
+        desk.nextLevel();
     }
 
+    public void giveNumberCard() {
+        Collections.shuffle(getNotPlayedNumberCards());
+        for (Player player : getPlayers()) {
+            for (int i = 0; i < getDesk().getLevelCard().getLevel(); i++)
+                player.getNumberCards().add(getRandomNumberCard());
+            Collections.sort(player.getNumberCards());
+        }
+    }
+
+    public NumberCard getRandomNumberCard() {
+        return getNotPlayedNumberCards().pop();
+    }
 
     public void reset() {
-
+        notPlayedNumberCards.addAll(desk.getShownNumberCards());
+        desk.getShownNumberCards().clear();
+        giveNumberCard();
     }
 }

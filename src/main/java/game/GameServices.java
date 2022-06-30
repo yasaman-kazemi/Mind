@@ -22,16 +22,7 @@ public class GameServices {
     }
 
     public void start() {
-        giveNumberCard();
-    }
-
-    public void giveNumberCard() {
-        Collections.shuffle(game.getNotPlayedNumberCards());
-        for (Player player : game.getPlayers()) {
-            for (int i = 0; i < getDesk().getLevelCard().getLevel(); i++)
-                player.getNumberCards().add(getRandomNumberCard());
-            Collections.sort(player.getNumberCards());
-        }
+        game.giveNumberCard();
     }
 
     //todo check level has end
@@ -51,7 +42,8 @@ public class GameServices {
     }
 
     public String noticeStatus() {
-        return game.getStatus().toString();
+        return "Game status = " + game.getStatus().toString() + "\n" +
+                "Level = " + getDesk().getLevelCard().getLevel();
     }
 
     public String wrongCardPlayed(NumberCard numberCard) {
@@ -68,10 +60,6 @@ public class GameServices {
 
     public Desk getDesk() {
         return game.getDesk();
-    }
-
-    public NumberCard getRandomNumberCard() {
-        return game.getNotPlayedNumberCards().pop();
     }
 
 

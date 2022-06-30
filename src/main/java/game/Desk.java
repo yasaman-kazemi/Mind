@@ -92,9 +92,8 @@ public class Desk {
         Collections.sort(shownNumberCards);
     }
 
-    public LevelCard nextLevel() {
+    public void nextLevel() {
         setLevelCard(new LevelCard(this.levelCard.getLevel() + 1));
-        return getLevelCard();
     }
 
 }
