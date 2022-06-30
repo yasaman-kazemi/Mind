@@ -25,26 +25,45 @@ public class GameServices {
         giveNumberCard();
     }
 
-    public String noticeEnd() {
+    public void giveNumberCard() {
+        Collections.shuffle(game.getNotPlayedNumberCards());
+        for (Player player : game.getPlayers()) {
+            for (int i = 0; i < getDesk().getLevelCard().getLevel(); i++)
+                player.getNumberCards().add(getRandomNumberCard());
+            Collections.sort(player.getNumberCards());
+        }
+    }
+
+    //todo check level has end
+    public String play(Player player) {
+        String result;
+        NumberCard numberCard = player.popLowestNumberCard();
+        if (isCardValid(numberCard)) {
+            getDesk().putNumberCard(numberCard);
+            result = noticeStatus();
+        } else result = wrongCardPlayed(numberCard);
+        if (game.hasEndLevel()) game.goNextLevel();
+        return result;
+    }
+
+    public boolean isCardValid(NumberCard playedNumberCard) {
+        return !hasAnyoneLowerNumberCard(playedNumberCard);
+    }
+
+    public String noticeStatus() {
         return game.getStatus().toString();
     }
 
-    //todo fill these methods
-    public String play(Player player) {
-        NumberCard numberCard = player.popLowestNumberCard();
-        if (isCardValid(numberCard)) getDesk().putNumberCard(numberCard);
-        else loseHeartCard();
-        return "";
-    }
-
-    public String wrongCardPlayed() {
+    public String wrongCardPlayed(NumberCard numberCard) {
         loseHeartCard();
-        GameStatus gameStatus = game.getStatus();
-        if (gameStatus == GameStatus.lose) return noticeEnd();
-        else {
-
+        if (game.getStatus() == GameStatus.inProgress) {
+            ArrayList<NumberCard> result = new ArrayList<>();
+            for (Player player : game.getPlayers())
+                result.addAll(player.collectAllLowerNumberCard(numberCard));
+            Collections.sort(result);
+            getDesk().putAllNumberCards(result);
         }
-        return "";
+        return noticeStatus();
     }
 
     public Desk getDesk() {
@@ -55,23 +74,10 @@ public class GameServices {
         return game.getNotPlayedNumberCards().pop();
     }
 
-    public void giveNumberCard() {
-        Collections.shuffle(game.getNotPlayedNumberCards());
-        for (Player player : game.getPlayers()) {
-            for (int i = 0; i < getDesk().getLevelCard().getLevel(); i++)
-                player.getNumberCards().add(getRandomNumberCard());
-            Collections.sort(player.getNumberCards());
-        }
-    }
-
-
-    public boolean isCardValid(NumberCard playedNumberCard) {
-        return !hasAnyoneLowerNumberCard(playedNumberCard);
-    }
 
     public boolean hasAnyoneLowerNumberCard(NumberCard numberCard) {
         for (Player player : game.getPlayers())
-            if (player.hasLowerNumberCard(numberCard)) return true;
+            if (player.hasLowerNumberCard(numberCard) || player.getNumberCards().isEmpty()) return true;
         return false;
     }
 
@@ -95,4 +101,6 @@ public class GameServices {
     public void loseNinjaCard() {
         if (getDesk().hasAvailableNinjaCards()) getDesk().decreaseNinjaCards();
     }
+
+
 }

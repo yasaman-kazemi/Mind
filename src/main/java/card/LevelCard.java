@@ -35,4 +35,5 @@ public class LevelCard extends Card {
     public void setGift(Card gift) {
         this.gift = gift;
     }
+
 }

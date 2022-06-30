@@ -3,6 +3,7 @@ package game;
 import card.LevelCard;
 import card.NumberCard;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -81,7 +82,19 @@ public class Desk {
         shownNumberCards.push(numberCard);
     }
 
+    public void putAllNumberCards(ArrayList<NumberCard> numberCards) {
+        shownNumberCards.addAll(numberCards);
+        sortShownNumberCards();
+    }
+
+    //todo check first out card is highest
     public void sortShownNumberCards() {
         Collections.sort(shownNumberCards);
     }
+
+    public LevelCard nextLevel() {
+        setLevelCard(new LevelCard(this.levelCard.getLevel() + 1));
+        return getLevelCard();
+    }
+
 }

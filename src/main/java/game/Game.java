@@ -1,5 +1,7 @@
 package game;
 
+import card.Card;
+import card.HeartCard;
 import card.LevelCard;
 import card.NumberCard;
 import player.Player;
@@ -54,11 +56,25 @@ public class Game {
     //if we lose all the heart cards, we lose.
     public GameStatus getStatus() {
         if (getLastLevel() == desk.getLevelCard().getLevel() && hasEndLevel()) return GameStatus.win;
-        if (desk.hasAvailableHeartCards()) return GameStatus.lose;
+        if (!desk.hasAvailableHeartCards()) return GameStatus.lose;
         return GameStatus.inProgress;
     }
 
     public int getLastLevel() {
         return 16 - (2 * numberOfPlayers);
+    }
+
+    public LevelCard goNextLevel() {
+        Card gift = desk.getLevelCard().getGift();
+        if (gift != null) {
+            if (gift instanceof HeartCard) desk.increaseHeartCards();
+            else desk.increaseNinjaCards();
+        }
+        return desk.nextLevel();
+    }
+
+
+    public void reset() {
+
     }
 }

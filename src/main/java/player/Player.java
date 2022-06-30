@@ -39,12 +39,15 @@ public class Player {
         return null;
     }
 
-//    public ArrayList<NumberCard> collectAllLowerNumberCard(NumberCard numberCard) {
-//
-//    }
+
+    public ArrayList<NumberCard> collectAllLowerNumberCard(NumberCard numberCard) {
+        ArrayList<NumberCard> result = new ArrayList<>();
+        while (hasLowerNumberCard(numberCard)) result.add(popLowestNumberCard());
+        return result;
+    }
 
     public boolean hasLowerNumberCard(NumberCard numberCard) {
         if (!numberCards.isEmpty()) return numberCards.get(0).getValue() < numberCard.getValue();
-        return true;
+        return false;
     }
 }
