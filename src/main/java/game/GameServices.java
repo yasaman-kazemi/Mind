@@ -25,7 +25,7 @@ public class GameServices {
         game.giveNumberCard();
     }
 
-    //todo check level has end
+
     public String play(Player player) {
         String result;
         NumberCard numberCard = player.popLowestNumberCard();
